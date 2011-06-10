@@ -8,16 +8,16 @@
 		},
 		{
 		build: function(data){
-			var contacts = null;
-			if (data && data.groupId) {
-				contacts = snow.dm.list("contact",{groupId:data.groupId});
-			}else{
-				contacts = snow.dm.list("contact");
-			}
-
-			var $e = $("#tmpl-contactList").render({"contacts":contacts});
-		
-			return $e;
+			var thisC = this;
+            var dfd = $.Deferred();
+			
+            var $e = $("#tmpl-contactList").render();
+			
+            thisC.refreshContactList($(".contactList")).done(function(){
+                dfd.resolve($e);
+            });
+            
+            return dfd.promise();
 		},
 		postDisplay:function(){
 			var thisComponent = this;
@@ -30,7 +30,17 @@
 				//snow.ui.display("contactInfo",{id:id});
 			});
 			
-		}
+		},
+		refreshContactList: function($contactList){
+            $contactList = $contactList || this.$element.find(".contactList");
+            return snow.dm.list("contact").done(function(list){
+                if (list) {
+                    $contactList.empty();
+                    var $contacts = $($("#tmpl-contactList-contact").render(list));
+                    $contactList.append($contacts);
+                }
+            });
+        }
 	});
 
 </script>
@@ -39,14 +49,12 @@
 
 
 <script id="tmpl-contactList" type="text/html">
-	<div>
-		<div id="contacts-content">
-		{{each contacts}}
-			<div class="contact" data-obj_type="contact" data-obj_id="${id}" >
-				<div><span class="name">${name}</span></div>
-			</div>	
-		{{/each contacts}}
-		</div>
-	</div>
+	<div id="contacts-content" class="contactList"></div>
+</script>
+
+<script id="tmpl-contactList-contact" type="text/html">
+	<div class="contact" data-obj_type="contact" data-obj_id="${id}" >
+		<div><span class="name">${name}</span></div>
+	</div>	
 </script>
 

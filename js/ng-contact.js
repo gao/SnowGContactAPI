@@ -342,9 +342,9 @@
 			
 		}
 		
-		localStorage.groupcontact = JSON.stringify(groupcontact);
+		//localStorage.groupcontact = JSON.stringify(groupcontact);
 		
-		localStorage.contacts = JSON.stringify(contacts);
+		//localStorage.contacts = JSON.stringify(contacts);
 
 		hasGetContactsData = true;
 		if(hasGetContactsData && hasGetGroupsData){

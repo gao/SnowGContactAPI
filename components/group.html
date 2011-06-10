@@ -1,0 +1,59 @@
+<!-- Simple groupsComponent -->
+<script type="text/javascript">
+
+	snow.ui.registerComponent("group",
+		{
+			parent: "#fstCol",
+			emptyParent: true
+		},
+		{
+		build: function(data){
+			var thisC = this;
+            var dfd = $.Deferred();
+			
+            var $e = $("#tmpl-groupList").render();
+            thisC.refreshGroupList($(".contactList")).done(function(){
+                dfd.resolve($e);
+            });
+            
+            return dfd.promise();
+		},
+		postDisplay:function(){
+			var thisComponent = this;
+			var $element = this.$element;
+			
+			// user click on group
+			$element.delegate(".group","click",function(){
+				var $group = $(this);
+				var id = $group.attr("data-obj_id");
+				//snow.ui.display("groupInfo",{id:id});
+			});
+			
+		},
+		refreshGroupList: function($groupList){
+            $groupList = $groupList || this.$element.find(".groupList");
+            return snow.dm.list("group").done(function(list){
+                if (list) {
+                    $groupList.empty();
+                    var $groups = $($("#tmpl-groupList-group").render(list));
+                    $groupList.append($groups);
+                }
+            });
+        }
+	});
+
+</script>
+<!--  /Simple groupsComponent -->
+
+
+
+<script id="tmpl-groupList" type="text/html">
+	<div id="groups-content" class="groupList"></div>
+</script>
+
+<script id="tmpl-groupList-group" type="text/html">
+	<div class="group" data-obj_type="group" data-obj_id="${id}" >
+		<div><span class="name">${name}</span></div>
+	</div>	
+</script>
+

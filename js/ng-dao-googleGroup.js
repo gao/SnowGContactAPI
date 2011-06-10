@@ -1,8 +1,6 @@
 <!-- google group Dao -->	
 	var GoogleGroupDao = (function(){
 			
-		var groups = getGroups();
-			
 		function GoogleGroupDao(){};
 
 		// ------ DAO Generic CRUD Interface ------ //
@@ -17,8 +15,9 @@
 
 		GoogleGroupDao.prototype.list = function(objectType,opts){
 			var dfd = $.Deferred();
-			$.when(ng.contact.fetchContactList(callback)).done( function(contactList) {
-				dfd.resolve(resultList);
+			
+			chrome.extension.getBackgroundPage().ng.contact.fetchGroupList(function(){}).done( function(groupList) {
+				dfd.resolve(groupList);
 			});
 			return dfd.promise();
 		};
