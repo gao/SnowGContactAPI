@@ -1,0 +1,52 @@
+<!-- Simple contactsComponent -->
+<script type="text/javascript">
+
+	snow.ui.registerComponent("contact",
+		{
+			parent: "#fstCol",
+			emptyParent: true
+		},
+		{
+		build: function(data){
+			var contacts = null;
+			if (data && data.groupId) {
+				contacts = snow.dm.list("contact",{groupId:data.groupId});
+			}else{
+				contacts = snow.dm.list("contact");
+			}
+
+			var $e = $("#tmpl-contactList").render({"contacts":contacts});
+		
+			return $e;
+		},
+		postDisplay:function(){
+			var thisComponent = this;
+			var $element = this.$element;
+			
+			// user click on contact
+			$element.delegate(".contact","click",function(){
+				var $contact = $(this);
+				var id = $contact.attr("data-obj_id");
+				//snow.ui.display("contactInfo",{id:id});
+			});
+			
+		}
+	});
+
+</script>
+<!--  /Simple contactsComponent -->
+
+
+
+<script id="tmpl-contactList" type="text/html">
+	<div>
+		<div id="contacts-content">
+		{{each contacts}}
+			<div class="contact" data-obj_type="contact" data-obj_id="${id}" >
+				<div><span class="name">${name}</span></div>
+			</div>	
+		{{/each contacts}}
+		</div>
+	</div>
+</script>
+

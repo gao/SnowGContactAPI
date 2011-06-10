@@ -1,0 +1,81 @@
+<!-- mainScreen Component -->
+<script type="text/javascript">
+
+	snow.ui.registerComponent("mainScreen",
+		{
+			parent: "#container",
+			emptyParent:true
+		},
+		{
+		build: function(){
+			var $e = $("#tmpl-mainScreen").render({});
+			return $e
+		},
+		postDisplay:function(){
+			var $loginButton = $("#btnLogin");
+			var $logoffButton = $("#btnLogoff");
+			var $btnListGroups = $("#btnListGroups");
+			var $btnListCntacts = $("#btnListCntacts");
+			
+			//user click on button login
+			$loginButton.click(function(){
+				ng.daos.getToken(function(){
+					$logoffButton.show();
+					$btnListGroups.show();
+					$btnListCntacts.show();
+					$loginButton.hide();
+					
+				});
+			});
+			
+			//user click on button logoff,if visible
+			$logoffButton.click(function(){
+				ng.daos.logOut();
+				$loginButton.show();
+				$logoffButton.hide();
+				$btnListGroups.hide();
+				$btnListCntacts.hide();
+			});
+			
+			$btnListGroups.click(function(){
+				snow.ui.display("group");
+			});
+			
+			$btnListCntacts.click(function(){
+				snow.ui.display("contact");
+			});
+			
+			// test if has token
+			if(ng.daos.hasToken()){
+				$logoffButton.show();
+				$btnListGroups.show();
+				$btnListCntacts.show();
+				$loginButton.hide();
+			}else{
+				$loginButton.show();
+				$logoffButton.hide();
+				$btnListGroups.hide();
+				$btnListCntacts.hide();
+			}
+		}
+	});
+
+</script>
+<!--  /mainScreen Component -->
+
+<script id="tmpl-mainScreen" type="text/html">
+	<div class="mainScreen">
+		<div class="top">
+			<button id="btnLogin">Login</button>
+			<button id="btnLogoff" style="display:none">Logoff</button>
+			<button id="btnListGroups" style="display:none">List groups</button>
+			<button id="btnListCntacts" style="display:none">List contacts</button>
+		</div>
+		<div class="center">
+			<div id="fstCol" class="panel"></div> 	
+			<div id="secCol" class="panel"></div> 
+		</div>
+		<div class="bottom"></div> 	
+	</div>
+</script>
+
