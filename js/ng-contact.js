@@ -349,7 +349,7 @@
 		hasGetContactsData = true;
 		if(hasGetContactsData && hasGetGroupsData){
   			if(callback){
-				callback();
+				callback(contacts);
 			}
 		}
 	};

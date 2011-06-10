@@ -16,7 +16,10 @@
 		GoogleContactDao.prototype.list = function(objectType,opts){
 			var dfd = $.Deferred();
 			
-			chrome.extension.getBackgroundPage().ng.contact.fetchContactList(function(){}).done( function(contactList) {
+			var callBack = function(data){
+			};
+			
+			chrome.extension.getBackgroundPage().ng.contact.fetchContactList(callBack).done( function(contactList) {
 				dfd.resolve(contactList);
 			});
 			return dfd.promise();
